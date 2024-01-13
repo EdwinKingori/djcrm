@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from . models import Lead, Agent
-from .forms import LeadForm
+from .forms import LeadForm, LeadModelForm
 # Create your views here.
 
 
@@ -24,25 +24,26 @@ def lead_detail(request, pk):
 
 
 def CreateLead(request):
-    form = LeadForm()
+
     if request.method == "POST":
-        form = LeadForm(request.POST)
+        form = LeadModelForm(request.POST)
         # Checking if form is valid
         if form.is_valid():
-            print("The form is valid")
-            print(form.cleaned_data)
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             age = form.cleaned_data['age']
-            agent = Agent.objects.first()
+            agent = form.cleaned_data['agent']
             Lead.objects.create(
                 first_name=first_name,
                 last_name=last_name,
                 age=age,
                 agent=agent
             )
-            print("Lead created Successfully!")
+
             return HttpResponseRedirect(reverse("index"))
+    else:
+        form = LeadModelForm()
+
     context = {
         "form": form
     }
