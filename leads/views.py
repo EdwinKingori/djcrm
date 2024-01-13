@@ -60,6 +60,12 @@ def update_lead(request, pk):
 
     return render(request, "leads/update_lead.html", context)
 
+
+def lead_delete(request, pk):
+    lead = Lead.objects.get(id=pk)
+    lead.delete()
+    return HttpResponseRedirect(reverse("index"))
+
 # Manual update function
 
 # def update_lead(request, pk):
