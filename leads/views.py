@@ -91,17 +91,19 @@ class UpdateLeadView(UpdateView):
         return reverse("index")
 
 
-def lead_delete(request, pk):
-    lead = Lead.objects.get(id=pk)
-    lead.delete()
-    return HttpResponseRedirect(reverse("index"))
+# def lead_delete(request, pk):
+#     lead = Lead.objects.get(id=pk)
+#     lead.delete()
+#     return HttpResponseRedirect(reverse("index"))
 
 
-# class LeadDeleteView(DeleteView):
-#     template_name = "leads/index.html"
-#     queryset = Lead.objects.get(id=pk)
-#     model = Lead
-#     context_object_name = "index"
+class LeadDeleteView(DeleteView):
+    template_name = "leads/lead_delete.html"
+    model = Lead
+
+    def get_success_url(self):
+        return reverse("index")
+
 
 # Manual update function
 # def update_lead(request, pk):
