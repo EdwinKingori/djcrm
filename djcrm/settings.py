@@ -135,3 +135,4 @@ AUTH_USER_MODEL = 'leads.user'
 MEDIA_ROOT = BASE_DIR/"uploads"
 MEDIA_URL = "/user-media/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+LOGIN_REDIRECT_URL = "/leads"
