@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
 # from django.contrib.auth.forms import
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -33,7 +34,7 @@ class LandingPageView(TemplateView):
 #         "leads": leads
 #     }
 #     return render(request, "leads/index.html", context)
-class IndexView(ListView):
+class IndexView(LoginRequiredMixin, ListView):
     template_name = "leads/index.html"
     queryset = leads = Lead.objects.all()
     context_object_name = "leads"
@@ -45,7 +46,7 @@ class IndexView(ListView):
 #         "lead": lead
 #     }
 #     return render(request, "leads/lead_detail.html", context)
-class LeadDetailView(DetailView):
+class LeadDetailView(LoginRequiredMixin, DetailView):
     template_name = "leads/lead_detail.html"
     # queryset = Lead.objects.all()
     model = Lead
@@ -67,7 +68,7 @@ class LeadDetailView(DetailView):
 #         "form": form
 #     }
 #     return render(request, "leads/lead_create.html", context)
-class CreateLeadView(CreateView):
+class CreateLeadView(LoginRequiredMixin, CreateView):
     template_name = "leads/lead_create.html"
     form_class = LeadModelForm
 
@@ -104,7 +105,7 @@ class CreateLeadView(CreateView):
 #     }
 
 #     return render(request, "leads/update_lead.html", context)
-class UpdateLeadView(UpdateView):
+class UpdateLeadView(LoginRequiredMixin, UpdateView):
     template_name = "leads/update_lead.html"
     model = Lead
     form_class = LeadModelForm
@@ -119,7 +120,7 @@ class UpdateLeadView(UpdateView):
 #     return HttpResponseRedirect(reverse("index"))
 
 
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "leads/lead_delete.html"
     model = Lead
 
