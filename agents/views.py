@@ -1,3 +1,4 @@
+from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, reverse
 from django.views import generic
@@ -31,3 +32,11 @@ class CreateAgentView(LoginRequiredMixin, generic.CreateView):
         # agent.organization = user_profile
         agent.save()
         return super(CreateAgentView, self).form_valid(form)
+
+
+class AgentDetailView(LoginRequiredMixin, generic.DetailView):
+    template_name = "agents/agent_detail.html"
+    context_object_name = "agent"
+
+    def get_queryset(self):
+        return Agent.objects.all()
