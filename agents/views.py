@@ -51,3 +51,13 @@ class UpdateAgentView(LoginRequiredMixin, generic.UpdateView):
 
     def get_queryset(self):
         return Agent.objects.all()
+
+
+class DeleteAgentView(LoginRequiredMixin, generic.DeleteView):
+    template_name = "agents/agent_delete.html"
+
+    def get_success_url(self):
+        return reverse("agents")
+
+    def get_queryset(self):
+        return Agent.objects.all()
