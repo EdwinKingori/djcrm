@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.AgentListView.as_view(), name='agents'),
     path('<int:pk>', views.AgentDetailView.as_view(), name="agent_detail"),
+    path("<int:pk>/update/", views.UpdateAgentView.as_view(), name="update"),
     path('create/', views.CreateAgentView.as_view(), name='createagent'),
 
 ]
