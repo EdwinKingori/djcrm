@@ -12,7 +12,8 @@ class AgentListView(LoginRequiredMixin, generic.ListView):
     template_name = "agents/agents_list.html"
 
     def get_queryset(self):
-        return Agent.objects.all()
+        organization = self.request.user.userprofile
+        return Agent.objects.filter(organization=organization)
 
 
 class CreateAgentView(LoginRequiredMixin, generic.CreateView):
