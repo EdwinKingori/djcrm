@@ -2,6 +2,7 @@ from django.core.mail import send_mail
 # from django.contrib.auth.forms import
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from agents.mixins import OrganizerLoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -68,7 +69,7 @@ class LeadDetailView(LoginRequiredMixin, DetailView):
 #         "form": form
 #     }
 #     return render(request, "leads/lead_create.html", context)
-class CreateLeadView(LoginRequiredMixin, CreateView):
+class CreateLeadView(OrganizerLoginRequiredMixin, CreateView):
     template_name = "leads/lead_create.html"
     form_class = LeadModelForm
 
@@ -105,7 +106,7 @@ class CreateLeadView(LoginRequiredMixin, CreateView):
 #     }
 
 #     return render(request, "leads/update_lead.html", context)
-class UpdateLeadView(LoginRequiredMixin, UpdateView):
+class UpdateLeadView(OrganizerLoginRequiredMixin, UpdateView):
     template_name = "leads/update_lead.html"
     model = Lead
     form_class = LeadModelForm
@@ -120,7 +121,7 @@ class UpdateLeadView(LoginRequiredMixin, UpdateView):
 #     return HttpResponseRedirect(reverse("index"))
 
 
-class LeadDeleteView(LoginRequiredMixin, DeleteView):
+class LeadDeleteView(OrganizerLoginRequiredMixin, DeleteView):
     template_name = "leads/lead_delete.html"
     model = Lead
 
