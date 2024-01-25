@@ -42,10 +42,18 @@ class IndexView(LoginRequiredMixin, ListView):
     context_object_name = "leads"
 
     def get_queryset(self):
-        queryset = leads = Lead.objects.all()
-        if self.request.user.is_agent:
-            # filtering the leads based on the agents field, where the agent has the user equal to self.reqest.user
-            queryset = queryset.filter(agent__user=self.request.user)
+        user = self.request.user
+
+        # initial queryset  of leads for the entire organization
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Lead.objects.filter(organization=user.userprofile)
+        else:
+            # else if they are not an organizer, being an agent, we filter the agent through the current organization
+            queryset = Lead.objects.filter(
+                organization=user.agent.organization)
+            # filtering the leads based on the agents field, where the agent has the user equal to user which is, self.reqest.user
+            queryset = queryset.filter(agent__user=user)
         return queryset
 
 

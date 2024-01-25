@@ -24,6 +24,8 @@ class Lead(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     age = models.IntegerField()
+    organization = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE)  # allows leads to beunser a current organization
     agent = models.ForeignKey(
         "Agent", null=True, blank=True, on_delete=models.SET_NULL)
 
