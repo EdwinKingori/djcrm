@@ -1,4 +1,6 @@
+from typing import Any
 from django.core.mail import send_mail
+from django.db.models.query import QuerySet
 # from django.contrib.auth.forms import
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -37,8 +39,14 @@ class LandingPageView(TemplateView):
 #     return render(request, "leads/index.html", context)
 class IndexView(LoginRequiredMixin, ListView):
     template_name = "leads/index.html"
-    queryset = leads = Lead.objects.all()
     context_object_name = "leads"
+
+    def get_queryset(self):
+        queryset = leads = Lead.objects.all()
+        if self.request.user.is_agent:
+            # filtering the leads based on the agents field, where the agent has the user equal to self.reqest.user
+            queryset = queryset.filter(agent__user=self.request.user)
+        return queryset
 
 
 # def lead_detail(request, pk):
