@@ -1,11 +1,12 @@
-from typing import Any
-from django.db.models.query import QuerySet
-from django.shortcuts import render, reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .mixins import OrganizerLoginRequiredMixin
-from leads.models import Agent, UserProfile
+from django.shortcuts import render, reverse
+from leads.models import Agent
 from .forms import AgentModelForm
+from .mixins import OrganizerLoginRequiredMixin
+from django.core.mail import send_mail
+
+
 # Create your views here.
 
 
@@ -26,10 +27,24 @@ class CreateAgentView(OrganizerLoginRequiredMixin, generic.CreateView):
 
     def form_valid(self, form):
         # Commit false ensures agent is not saved in the database
-        agent = form.save(commit=False)
+        user = form.save(commit=False)
+        user.is_agent = True
+        user.is_organizer = False
+        user.save()
+        Agent.objects.create(
+            user=user,
+            organization=self.request.user.userprofile,
+        )
+
+        send_mail(
+            subject="You are invited to be an agent",
+            message="You were created as an agent on DJCRM. Please login to start working.",
+            from_email="admin@test.com",
+            recipient_list=[user.email]
+        )
         # accessing the specific user profile
-        agent.organization = self.request.user.userprofile
-        agent.save()  # saving to the database
+        # agent.organization = self.request.user.userprofile
+        # agent.save()  # saving to the database
         return super(CreateAgentView, self).form_valid(form)
 
 
