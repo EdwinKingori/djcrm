@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    # when a user creates an account, the usser becomes the default organizerof that account.
+    # when a user creates an account, the user becomes the default organizer of that account.
     is_organizer = models.BooleanField(default=True)
     is_agent = models.BooleanField(default=False)
 

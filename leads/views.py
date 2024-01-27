@@ -66,9 +66,23 @@ class IndexView(LoginRequiredMixin, ListView):
 class LeadDetailView(LoginRequiredMixin, DetailView):
     template_name = "leads/lead_detail.html"
     # queryset = Lead.objects.all()
-    model = Lead
+    # model = Lead
     context_object_name = "lead"
 
+    def get_queryset(self):
+        user = self.request.user
+
+        # initial queryset  of leads for the entire organization
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Lead.objects.filter(organization=user.userprofile)
+        else:
+            # else if they are not an organizer, being an agent, we filter the agent through the current organization
+            queryset = Lead.objects.filter(
+                organization=user.agent.organization)
+            # filtering the leads based on the agents field, where the agent has the user equal to user which is, self.reqest.user
+            queryset = queryset.filter(agent__user=user)
+        return queryset
 
 # def CreateLead(request):
 
@@ -85,6 +99,8 @@ class LeadDetailView(LoginRequiredMixin, DetailView):
 #         "form": form
 #     }
 #     return render(request, "leads/lead_create.html", context)
+
+
 class CreateLeadView(OrganizerLoginRequiredMixin, CreateView):
     template_name = "leads/lead_create.html"
     form_class = LeadModelForm
@@ -124,13 +140,16 @@ class CreateLeadView(OrganizerLoginRequiredMixin, CreateView):
 #     return render(request, "leads/update_lead.html", context)
 class UpdateLeadView(OrganizerLoginRequiredMixin, UpdateView):
     template_name = "leads/update_lead.html"
-    model = Lead
+    # model = Lead
     form_class = LeadModelForm
 
     def get_success_url(self):
         return reverse("index")
 
-
+    def get_queryset(self):
+        user = self.request.user
+        # initial queryset  of leads for the entire organization
+        return Lead.objects.filter(organization=user.userprofile)
 # def lead_delete(request, pk):
 #     lead = Lead.objects.get(id=pk)
 #     lead.delete()
@@ -139,10 +158,15 @@ class UpdateLeadView(OrganizerLoginRequiredMixin, UpdateView):
 
 class LeadDeleteView(OrganizerLoginRequiredMixin, DeleteView):
     template_name = "leads/lead_delete.html"
-    model = Lead
+    # model = Lead
 
     def get_success_url(self):
         return reverse("index")
+
+    def get_queryset(self):
+        user = self.request.user
+        # initial queryset  of leads for the entire organization
+        return Lead.objects.filter(organization=user.userprofile)
 
 
 # Manual update function

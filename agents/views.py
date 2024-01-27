@@ -25,14 +25,11 @@ class CreateAgentView(OrganizerLoginRequiredMixin, generic.CreateView):
         return reverse("agents")
 
     def form_valid(self, form):
+        # Commit false ensures agent is not saved in the database
         agent = form.save(commit=False)
         # accessing the specific user profile
         agent.organization = self.request.user.userprofile
-        # Check if UserProfile exists, create if not (method 2)
-        # user_profile, created = UserProfile.objects.get_or_create(
-        #     user=self.request.user)
-        # agent.organization = user_profile
-        agent.save()
+        agent.save()  # saving to the database
         return super(CreateAgentView, self).form_valid(form)
 
 
