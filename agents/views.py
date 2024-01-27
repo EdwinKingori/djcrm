@@ -1,3 +1,4 @@
+import random
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, reverse
@@ -30,6 +31,7 @@ class CreateAgentView(OrganizerLoginRequiredMixin, generic.CreateView):
         user = form.save(commit=False)
         user.is_agent = True
         user.is_organizer = False
+        user.set_password(f"{random.randint(0,10000)}")
         user.save()
         Agent.objects.create(
             user=user,
