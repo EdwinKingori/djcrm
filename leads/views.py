@@ -47,15 +47,29 @@ class IndexView(LoginRequiredMixin, ListView):
         # initial queryset  of leads for the entire organization
         if user.is_organizer:
             # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
-            queryset = Lead.objects.filter(organization=user.userprofile)
+            queryset = Lead.objects.filter(
+                organization=user.userprofile, agent__isnull=False)
         else:
             # else if they are not an organizer, being an agent, we filter the agent through the current organization
             queryset = Lead.objects.filter(
-                organization=user.agent.organization)
+                organization=user.agent.organization, agent__isnull=False)
             # filtering the leads based on the agents field, where the agent has the user equal to user which is, self.reqest.user
             queryset = queryset.filter(agent__user=user)
         return queryset
 
+# Listing un-assigned leads
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        user = self.request.user
+
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Lead.objects.filter(
+                organization=user.userprofile, agent__isnull=True)
+            context.update({
+                "unassigned_leads": queryset
+            })
+        return context
 
 # def lead_detail(request, pk):
 #     lead = Lead.objects.get(id=pk)
@@ -63,6 +77,8 @@ class IndexView(LoginRequiredMixin, ListView):
 #         "lead": lead
 #     }
 #     return render(request, "leads/lead_detail.html", context)
+
+
 class LeadDetailView(LoginRequiredMixin, DetailView):
     template_name = "leads/lead_detail.html"
     # queryset = Lead.objects.all()
