@@ -1,6 +1,7 @@
 from typing import Any
 from django.core.mail import send_mail
 from django.db.models.query import QuerySet
+from django.forms.forms import BaseForm
 # from django.contrib.auth.forms import
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,10 +9,16 @@ from agents.mixins import OrganizerLoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import TemplateView
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import (
+    FormView,
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView)
 
 from . models import Lead, Agent
-from .forms import LeadForm, LeadModelForm, CustomUserCreationForm
+from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm
 # Create your views here.
 
 
@@ -183,6 +190,33 @@ class LeadDeleteView(OrganizerLoginRequiredMixin, DeleteView):
         user = self.request.user
         # initial queryset  of leads for the entire organization
         return Lead.objects.filter(organization=user.userprofile)
+
+
+class AssignAgentView(OrganizerLoginRequiredMixin, FormView):
+    template_name = "leads/assign_agent.html"
+    form_class = AssignAgentForm
+
+    # Defining a method to get the keyword arguments for initializing the form.
+    def get_form_kwargs(self, **kwargs):
+        # Calling the superclass method to get the default keyword arguments.
+        kwargs = super(AssignAgentView, self).get_form_kwargs(**kwargs)
+
+        # Updating the keyword arguments with an additional parameter, "request," set to the current request.
+        kwargs.update({
+            "request": self.request
+        })
+        return kwargs
+
+    def get_success_url(self):
+        return reverse("index")
+
+    def form_valid(self, form):
+        agent = form.cleaned_data["agent"]
+        # Retrieving the lead object based on the provided primary key (pk) from the URL.
+        lead = Lead.objects.get(id=self.kwargs["pk"])
+        lead.agent = agent
+        lead.save()
+        return super(AssignAgentView, self).form_valid(form)
 
 
 # Manual update function
