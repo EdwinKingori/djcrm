@@ -219,6 +219,10 @@ class AssignAgentView(OrganizerLoginRequiredMixin, FormView):
         return super(AssignAgentView, self).form_valid(form)
 
 
+class CategoryListView(LoginRequiredMixin, ListView):
+    template_name = "leads/category_list.html"
+
+
 # Manual update function
 # def update_lead(request, pk):
 #     lead = Lead.objects.get(id=pk)

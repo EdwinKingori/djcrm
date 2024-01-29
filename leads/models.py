@@ -28,6 +28,8 @@ class Lead(models.Model):
         UserProfile, on_delete=models.CASCADE)  # allows leads to beunser a current organization
     agent = models.ForeignKey(
         "Agent", null=True, blank=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        "Category", null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -42,6 +44,18 @@ class Agent(models.Model):
 
     def __str__(self):
         return self.user.email
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    organization = models.ForeignKey(
+        UserProfile, null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name
 
 
 def post_user_created_signal(sender, instance, created, **kwargs):
