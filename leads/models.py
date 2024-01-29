@@ -49,7 +49,7 @@ class Agent(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50)
     organization = models.ForeignKey(
-        UserProfile, null=True, blank=True, on_delete=models.CASCADE)
+        UserProfile, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = "Categories"

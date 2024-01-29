@@ -17,7 +17,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView)
 
-from . models import Lead, Agent
+from . models import Lead, Agent, Category
 from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm
 # Create your views here.
 
@@ -221,6 +221,21 @@ class AssignAgentView(OrganizerLoginRequiredMixin, FormView):
 
 class CategoryListView(LoginRequiredMixin, ListView):
     template_name = "leads/category_list.html"
+    context_object_name = "category_list"
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # initial queryset  of leads for the entire organization
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Category.objects.filter(
+                organization=user.userprofile)
+        else:
+            # else if they are not an organizer, being an agent, we filter the agent through the current organization
+            queryset = Category.objects.filter(
+                organization=user.agent.organization)
+        return queryset
 
 
 # Manual update function
