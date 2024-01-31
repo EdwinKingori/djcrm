@@ -10,6 +10,8 @@ urlpatterns = [
     path("<int:pk>/assign-agent/",
          views.AssignAgentView.as_view(), name='assign-agent'),
     path("create/", views.CreateLeadView.as_view(), name='createlead'),
-    path("categories/", views.CategoryListView.as_view(), name="categories")
+    path("categories/", views.CategoryListView.as_view(), name="categories"),
+    path("categories/<int:pk>/", views.CategoryDetailView.as_view(),
+         name="category-detail"),
 
 ]

@@ -255,6 +255,32 @@ class CategoryListView(LoginRequiredMixin, ListView):
                 organization=user.agent.organization)
         return queryset
 
+
+class CategoryDetailView(LoginRequiredMixin, DetailView):
+    template_name = "leads/category_detail.html"
+    context_object_name = "category"
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        leads = self.get_object().leads.all()
+
+        context.update({
+            "leads": leads
+        })
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Category.objects.filter(
+                organization=user.userprofile)
+        else:
+            # else if they are not an organizer, being an agent, we filter the agent through the current organization
+            queryset = Category.objects.filter(
+                organization=user.agent.organization)
+        return queryset
 # Manual update function
 # def update_lead(request, pk):
 #     lead = Lead.objects.get(id=pk)
