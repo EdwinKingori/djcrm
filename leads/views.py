@@ -18,7 +18,13 @@ from django.views.generic import (
     DeleteView)
 
 from . models import Lead, Agent, Category
-from .forms import LeadForm, LeadModelForm, CustomUserCreationForm, AssignAgentForm
+from .forms import (
+    LeadForm,
+    LeadModelForm,
+    CustomUserCreationForm,
+    AssignAgentForm,
+    LeadCategoryUpdateForm
+)
 # Create your views here.
 
 
@@ -259,15 +265,15 @@ class CategoryListView(LoginRequiredMixin, ListView):
 class CategoryDetailView(LoginRequiredMixin, DetailView):
     template_name = "leads/category_detail.html"
     context_object_name = "category"
+# adding the commented context below in the template as category.leads.all
+    # def get_context_data(self, **kwargs):
+    #     context = super(CategoryDetailView, self).get_context_data(**kwargs)
+    #     leads = self.get_object().leads.all()
 
-    def get_context_data(self, **kwargs):
-        context = super(CategoryDetailView, self).get_context_data(**kwargs)
-        leads = self.get_object().leads.all()
-
-        context.update({
-            "leads": leads
-        })
-        return context
+    #     context.update({
+    #         "leads": leads
+    #     })
+    #     return context
 
     def get_queryset(self):
         user = self.request.user
@@ -281,6 +287,30 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
             queryset = Category.objects.filter(
                 organization=user.agent.organization)
         return queryset
+
+
+class LeadCategoryUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "leads/category_update.html"
+    form_class = LeadCategoryUpdateForm
+
+    def get_queryset(self):
+        user = self.request.user
+        # initial queryset  of leads for the entire organization
+        if user.is_organizer:
+            # if the user is an organizer, then they have a user profile(acessed through user.userprofile in the database)
+            queryset = Lead.objects.filter(organization=user.userprofile)
+        else:
+            # else if they are not an organizer, being an agent, we filter the agent through the current organization
+            queryset = Lead.objects.filter(
+                organization=user.agent.organization)
+            # filtering the leads based on the agents field, where the agent has the user equal to user which is, self.reqest.user
+            queryset = queryset.filter(agent__user=user)
+        return queryset
+
+    def get_success_url(self):
+        return reverse("index")
+
+
 # Manual update function
 # def update_lead(request, pk):
 #     lead = Lead.objects.get(id=pk)

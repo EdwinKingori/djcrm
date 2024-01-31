@@ -16,10 +16,10 @@
                         <a href="{% url "lead_detail" lead.pk %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
                             Overview
                         </a>
-                        <a class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                            Reviews
+                        <a href ="{% url "lead-category-update" lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+                            Category
                         </a>
-                        <a  href="{% url "update" lead.id %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+                        <a  href="{% url "lead-update" lead.id %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
                             Update Details
                         </a>
                     </div>
