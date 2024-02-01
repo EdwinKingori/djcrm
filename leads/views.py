@@ -308,10 +308,10 @@ class LeadCategoryUpdateView(LoginRequiredMixin, UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse("index")
+        return reverse("lead_detail", kwargs={"pk": self.get_object().id})
 
 
-# Manual update function
+# Manual update of function
 # def update_lead(request, pk):
 #     lead = Lead.objects.get(id=pk)
 #     form = LeadForm()

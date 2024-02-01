@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+    category_update
+{% endblock title %}
+
 {% block content %}
 
     <section class="text-gray-600 body-font overflow-hidden">
@@ -16,12 +20,12 @@
                     </h1>
                     <div class="flex mb-4">
                         <a href="{% url "lead_detail" lead.id %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                            Overviews
+                            Overview
                         </a>
-                        <a href ="{% url "lead-category-update" lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                            Ratings
+                        <a href ="{% url "lead-category-update" lead.pk %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
+                            Category
                         </a>
-                        <a  href="{% url "lead-update" lead.id %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
+                        <a  href="{% url "lead-update" lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
                             Update Details
                         </a>
                     </div>
@@ -38,6 +42,4 @@
             </div>
         </div>
     </section>
-
-{% endblock content %}
-
+{% endblock %}
