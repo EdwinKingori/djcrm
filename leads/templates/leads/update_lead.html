@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load tailwind_filters %}
 
 {% block content %}
 
-    <section class="text-gray-600 body-font overflow-hidden">
+    <section class="text-gray-700 body-font overflow-hidden">
         <div class="container px-5 py-24 mx-auto">
 
             <div class="lg:w-4/5 mx-auto flex flex-wrap">
@@ -16,23 +17,26 @@
                     </h1>
                     <div class="flex mb-4">
                         <a href="{% url "lead_detail" lead.id %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                            Overviews
+                            Overview
                         </a>
                         <a href ="{% url "lead-category-update" lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                            Ratings
+                            Category
                         </a>
                         <a  href="{% url "lead-update" lead.id %}" class="flex-grow text-indigo-500 border-b-2 border-indigo-500 py-2 text-lg px-1">
                             Update Details
                         </a>
                     </div>
-                    <form action="" method="POST">
+                    <form method="POST">
                         {% csrf_token %}
-                        {{form.as_p}}
-                        <button type="submit">Submit</button>
+                        {{ form|crispy }}
+                        <button type="submit" class="w-full text-white bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-md">Submit</button>
                     </form>
-                    <a href="{% url "delete" lead.id %}" class="w-1/2 mt-3 flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                    <div class="mt-5 py-5 border-t border-gray-200">
+                        <a href="{% url "delete" lead.id %}" class="w-1/2 mt-3 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
                             Delete Lead
-                    </a>
+                        </a>
+                    </div>
+                    
                 </div> 
                 <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400">
             </div>
