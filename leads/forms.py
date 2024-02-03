@@ -12,23 +12,16 @@ User = get_user_model()
 class LeadModelForm(forms.ModelForm):
     class Meta:
         model = Lead
-        fields = '__all__'
+        exclude = ['category', 'organization']
 
         labels = {
             'first_name': 'First Name',
             'last_name': 'Last Name',
-            'age': 'Age'
-        }
-
-        error_messages = {
-            'first_name': {
-                "required": "Your name must not be empty",
-                "max_length": "Please enter a shorter name!"
-            },
-            'last_name': {
-                "required": "Your name must not be empty",
-                "max_length": "Please enter a shorter name!"
-            }
+            'age': 'Age',
+            'agent': 'Agent',
+            'description': 'Description',
+            'phone_number': 'Phone Number',
+            'email': 'Email'
         }
 
 

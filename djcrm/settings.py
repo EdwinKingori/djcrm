@@ -144,6 +144,7 @@ MEDIA_URL = "/user-media/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 LOGIN_REDIRECT_URL = "/leads"
 LOGIN_URL = "/login"
+LOGOUT_REDIRECT_URL = "/"
 
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

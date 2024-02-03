@@ -1,4 +1,4 @@
-from typing import Any
+import datetime
 from django.core.mail import send_mail
 from django.db.models.query import QuerySet
 from django.forms.forms import BaseForm
@@ -138,6 +138,9 @@ class CreateLeadView(OrganizerLoginRequiredMixin, CreateView):
         return reverse("index")
 
     def form_valid(self, form):
+        lead = form.save(commit=False)
+        lead.organization = self.request.user.userprofile
+        lead.save()
         # To Send e-mail
         send_mail(
             subject="A lead has been created",
