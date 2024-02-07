@@ -8,5 +8,7 @@ Technologies Used
     Python Django: The backend of the DJCRM system is developed using the Django framework, leveraging the power and flexibility of Python to ensure a robust and scalable application.
 
     HTML: The frontend of the system is built using HTML, providing a structured and interactive user interface for effective user engagement.
+    
+    Django Crsiapy forms:
 
     Tailwind CSS: Styling for the HTML elements is implemented using Tailwind CSS, a utility-first CSS framework, to ensure a clean and responsive design.
