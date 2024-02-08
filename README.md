@@ -9,6 +9,6 @@ Technologies Used
 
     HTML: The frontend of the system is built using HTML, providing a structured and interactive user interface for effective user engagement.
     
-    Django Crsiapy forms:
+    Django Crsipy forms:
 
     Tailwind CSS: Styling for the HTML elements is implemented using Tailwind CSS, a utility-first CSS framework, to ensure a clean and responsive design.
