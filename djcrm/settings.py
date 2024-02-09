@@ -1,7 +1,9 @@
-from pathlib import Path
-
-import environ
 import os
+import environ
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
 
 env = environ.Env(
     DEBUG=(bool, False)
