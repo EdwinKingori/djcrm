@@ -143,6 +143,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+MEDIA_ROOT = BASE_DIR/"uploads"
+MEDIA_URL = "/user-media/"
 STATIC_ROOT = "static_root"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -152,9 +154,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'leads.user'
-
-MEDIA_ROOT = BASE_DIR/"uploads"
-MEDIA_URL = "/user-media/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 LOGIN_REDIRECT_URL = "/leads"
 LOGIN_URL = "/login"
